@@ -3,7 +3,7 @@
  */
 import React, {Component} from 'react';
 import _ from "lodash";
-import {openCurley, closeCurley} from "../common";
+import {openCurly, closeCurly} from "../common";
 
 export default class JsonBranch extends Component {
     constructor() {
@@ -49,11 +49,11 @@ export default class JsonBranch extends Component {
                                     </span>;
             case typeof(branch[key]) === "object":
                 return <span className="json-object">
-                                        <span className="json-bracket">{openCurley()}</span>
+                                        <span className="json-bracket">{openCurly()}</span>
                                         <JsonBranch branch={branch[key]}
                                                     onClick={this.props.onClick}
                                                     onMouseOver={this.props.onMouseOver}/>
-                                        <span className="json-bracket">{closeCurley()}</span>
+                                        <span className="json-bracket">{closeCurly()}</span>
                                     </span>;
             case typeof(branch[key]) === "number":
                 return <span className="json-number">{branch[key]}</span>;

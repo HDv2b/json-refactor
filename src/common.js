@@ -2,10 +2,10 @@
  * Created by elgoo on 11/02/2017.
  */
 
-export function openCurley() {
+export function openCurly() {
     return "{";
 }
 
-export function closeCurley() {
+export function closeCurly() {
     return "}";
 }
