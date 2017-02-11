@@ -14,14 +14,26 @@ class JsonBranch extends Component {
             <ul className="json-branch">
                 {_.map(keys,key =>
                     <li key={key}>
-                        <span>{key}: {function(){
-                            switch(typeof(branch[key])){
-                                case "object":
-                                    return <span>{"{"}<JsonBranch branch={branch[key]} />{"}"}</span>;
-                                case "array":
-                                    return <span>{"["}<JsonBranch branch={branch[key]} />{"]"}</span>;
+                        <span>
+                            <span className="json-key">"{key}"</span><span className="json-punctuation">:</span> {function(){
+                            //switch(typeof(branch[key])){
+                            switch(true){
+                                case Array.isArray(branch[key]):
+                                    return <span className="json-array">
+                                        <span className="json-bracket">{"["}</span>
+                                        <JsonBranch branch={branch[key]} />
+                                        <span className="json-bracket">{"]"}</span>
+                                    </span>;
+                                case typeof(branch[key]) === "object":
+                                    return <span className="json-object">
+                                        <span className="json-bracket">{"{"}</span>
+                                        <JsonBranch branch={branch[key]} />
+                                        <span className="json-bracket">{"}"}</span>
+                                    </span>;
+                                case typeof(branch[key]) === "number":
+                                    return <span className="json-number">{branch[key]}</span>;
                                 default:
-                                    return <span>{branch[key]}</span>
+                                    return <span className="json-string">"{branch[key]}"</span>
                         }}()}</span>
                     </li>
                 )}

@@ -1,0 +1,42 @@
+@import "reset.css";
+
+body {
+  font-family: monospace;
+  background-color: #2B2B2B;
+}
+
+.json-bracket {
+  color: #fff;
+}
+
+.json-branch {
+  margin-left: 10px;
+}
+
+.json-field {
+  color: red;
+}
+
+.json-array {
+  color: blueviolet;
+}
+
+.json-object {
+  color: blue;
+}
+
+.json-key {
+  color: #9876AA;
+}
+
+.json-punctuation, .json-keyword {
+  color: #CC7832;
+}
+
+.json-number {
+  color: #6897BB;
+}
+
+.json-string {
+  color: #6A8769
+}
