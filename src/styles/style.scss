@@ -5,12 +5,15 @@ body {
   background-color: #2B2B2B;
 }
 
-.json-bracket {
-  color: #fff;
+.json-branch {
+  ul {
+    list-style: none;
+  }
+  margin-left: 30px;
 }
 
-.json-branch {
-  margin-left: 10px;
+.json-bracket {
+  color: #fff;
 }
 
 .json-field {
