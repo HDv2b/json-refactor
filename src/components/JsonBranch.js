@@ -5,17 +5,48 @@ import React, {Component} from 'react';
 import _ from "lodash";
 import {openCurly, closeCurly} from "../common";
 
+class JsonKey extends Component {
+    handleHover(e) {
+        e.stopPropagation();
+        let trail = this.props.trail;
+        this.props.setHoverTrail(trail);
+    }
+
+    render() {
+        const keyName = this.props.keyName;
+
+        let classNames = ["json-key"];
+
+        let hoverTrail = this.props.hoverTrail;
+        let depth = this.props.depth;
+        let trail = this.props.trail;
+
+        let hovered = true;
+        for(let t in trail){
+            if(trail[t] !== hoverTrail[t]){
+                hovered = false;
+                break;
+            }
+        }
+
+        if(hovered){
+            classNames.push("hovered");
+        }
+
+        return (
+            <span className={classNames.join(" ")}
+                  onMouseOver={this.handleHover.bind(this)}>"{keyName}"</span>
+        )
+    }
+}
+
 export default class JsonBranch extends Component {
     componentWillMount() {
         this.setState({visible: true});
     }
 
-    handleHover(e) {
-        e.stopPropagation();
-        this.props.setHoverTrail(this.props.trail);
-    }
-
     handleClick(e) {
+
     }
 
     toggleVisibility() {
@@ -53,8 +84,18 @@ export default class JsonBranch extends Component {
             // only show comma if not the last element
             let comma = keys.slice(-1)[0] !== key ? <span className="json-punctuation">,</span> : false;
 
+            let trail = this.props.trail;
+
             return (
-                <li key={key}><JsonBranch branch={branch[key]} key={key}/>{comma}</li>
+                <li key={key}>
+                    <JsonBranch setHoverTrail={this.props.setHoverTrail}
+                                hoverTrail={this.props.hoverTrail}
+                                trail={trail}
+                                branch={branch[key]}
+                                depth={this.props.depth}
+                                key={key}/>
+                    {comma}
+                </li>
             )
         });
         return <ul>{elements}</ul>;
@@ -63,51 +104,47 @@ export default class JsonBranch extends Component {
     getObject(branch, keys) {
         let elements = _.map(keys, key => {
             let comma = keys.slice(-1)[0] !== key ? <span className="json-punctuation">,</span> : false;
+            let trail = this.props.trail.concat(key);
             return (
                 <li key={key}>
-                    <span className="json-key">"{key}"</span><span className="json-punctuation">:</span> <JsonBranch branch={branch[key]} key={key}/>{comma}
+                    <JsonKey keyName={key}
+                             setHoverTrail={this.props.setHoverTrail}
+                             hoverTrail={this.props.hoverTrail}
+                             depth={this.props.depth}
+                             trail={trail}/>
+                    <span className="json-punctuation">:</span>&nbsp;
+                    <JsonBranch setHoverTrail={this.props.setHoverTrail}
+                                hoverTrail={this.props.hoverTrail}
+                                trail={trail}
+                                depth={this.props.depth+1}
+                                branch={branch[key]}
+                                key={key}/>
+                    {comma}
                 </li>
             )
         });
         return <ul>{elements}</ul>;
     }
 
-    render() {
-        const branch = this.props.branch;
-        let keys = Object.keys(branch);
+    toggleButton() {
+        return <button className="toggle" onClick={this.toggleVisibility.bind(this)}>{this.displayVisibility()}</button>
+    }
 
-        let elements = _.map(keys, key => {
-                return (
-
-
-
-                    {
-                        /*<li key={key}
-                         onClick={this.handleClick.bind(this)}
-                         onMouseOver={this.handleHover.bind(this)}>
-                         <span>
-                         <span className="json-key">"{key}"</span>
-                         <span className="json-punctuation">: </span>
-                         {this.renderValue(branch, key)}
-                         </span>
-                         </li>*/
-                    }
-                )
-            }
-        );
-
+    getPair(branch, keys) {
         switch (Object.prototype.toString.call(branch)) {
             case "[object Array]":
                 return <span className="json-array">
-                            <span className="json-bracket">{"["}</span>
-                            {this.getArray(branch, keys)}
-                            <span className="json-bracket">{"]"}</span>
+                            {this.toggleButton()}
+                    <span className="json-bracket">{"["}</span>
+                    {this.getArray(branch, keys)}
+                    <span className="json-bracket">{"]"}</span>
                         </span>;
             case "[object Object]":
                 return <span className="json-object">
-                            <span className="json-bracket">{openCurly()}</span>
-                            {this.getObject(branch, keys)}
-                            <span className="json-bracket">{closeCurly()}</span>
+                            {this.toggleButton()}
+                    <span className="json-bracket">{openCurly()}</span>
+                    {this.getObject(branch, keys)}
+                    <span className="json-bracket">{closeCurly()}</span>
                         </span>;
             case "[object Number]":
                 return <span className="json-number">{branch}</span>;
@@ -118,6 +155,11 @@ export default class JsonBranch extends Component {
             case "[object Null]":
                 return <span className="json-null">{branch}</span>;
         }
+    }
+
+    render() {
+        const branch = this.props.branch;
+        let keys = Object.keys(branch);
 
         let classNames = ["json-branch"];
 
@@ -125,13 +167,11 @@ export default class JsonBranch extends Component {
             classNames.push("hidden");
         }
 
+        let pair = this.getPair(branch, keys);
+
         return (
-            <span>
-                <button className="toggle"
-                        onClick={this.toggleVisibility.bind(this)}>{this.displayVisibility()}</button>
-                <ul className={classNames.join(" ")}>
-                    {elements}
-                </ul>
+            <span className={classNames.join(" ")}>
+                    {pair}
             </span>
         )
     }
