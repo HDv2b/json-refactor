@@ -7,6 +7,6 @@ import _ from "lodash";
 export default class Breadcrumbs extends Component {
 
     render() {
-        return <div>{this.props.hoverTrail}</div>
+        return <div className="breadcrumbs">{this.props.hoverTrail.join(" > ")}</div>
     }
 }

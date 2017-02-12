@@ -3,6 +3,19 @@
 body {
   font-family: monospace;
   background-color: #2B2B2B;
+  line-height: 1.2em;
+}
+
+.breadcrumbes {
+  height: 2em;
+}
+
+.toggle {
+  position: absolute;
+  left: 0;
+  height: 12px;
+  width: 12px;
+  line-height: 7px;
 }
 
 .json-branch {
@@ -10,29 +23,20 @@ body {
     list-style: none;
   }
   margin-left: 30px;
+  &.hidden {
+    display: none;
+  }
 }
 
 .json-bracket {
   color: #fff;
 }
 
-.json-field {
-  color: red;
-}
-
-.json-array {
-  color: blueviolet;
-}
-
-.json-object {
-  color: blue;
-}
-
 .json-key {
   color: #9876AA;
 }
 
-.json-punctuation, .json-keyword {
+.json-punctuation, .json-keyword, .json-boolean {
   color: #CC7832;
 }
 
