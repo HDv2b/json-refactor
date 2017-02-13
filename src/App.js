@@ -53,25 +53,25 @@ class App extends Component {
 
     transformDelete(json,trail,depth = 0){
 
-        console.log(json,trail,depth);
-
         // if end of trail, delete the key
         if(trail.length == depth + 1){
-            delete json[trail[depth]];
+            if(typeof(json[trail[depth]]) !== "undefined") {
+                delete json[trail[depth]];
+            }
         } else {
             let branch = json[trail[depth]];
             let keyName = trail[depth];
             trail.shift();
             // if array, recurse function through all keys
-            if(Array.isArray(branch)){
-                console.log(branch,"is array :(");
+            if (Array.isArray(branch)) {
                 json[keyName] = branch.map(twig => {
-                    console.log(twig);
-                    return this.transformDelete(twig, trail, depth)
+                    return this.transformDelete(twig, [...trail], depth)
                 });
             } else {
                 // else recurse the function on the current
-                json[keyName] = this.transformDelete(branch, trail, depth);
+                if(typeof(json[keyName]) !== "undefined") {
+                    json[keyName] = this.transformDelete(branch, [...trail], depth);
+                }
             }
         }
 
@@ -80,7 +80,6 @@ class App extends Component {
 
     processTransformations() {
         let json = {...this.state.jsonInput};
-        console.log("in",json);
 
         for(let transformation of this.state.transformations){
             switch(transformation.transformationType){
@@ -89,8 +88,6 @@ class App extends Component {
                     break;
             }
         }
-
-        console.log("out",json);
         return json;
     }
 

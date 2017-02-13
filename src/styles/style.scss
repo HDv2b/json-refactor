@@ -42,6 +42,9 @@ body {
 .ide-json {
   float: left;
   width: 50%;
+  max-height: 100vh; /* todo: use flexbox */
+  overflow: auto;
+  position: relative;
 }
 
 .ide-transformations {
