@@ -12,6 +12,12 @@ class JsonKey extends Component {
         this.props.setHoverTrail(trail);
     }
 
+    handleClick(e){
+        e.stopPropagation();
+        let trail = this.props.trail;
+        this.props.setActiveTrail(trail);
+    }
+
     render() {
         const keyName = this.props.keyName;
 
@@ -35,7 +41,9 @@ class JsonKey extends Component {
 
         return (
             <span className={classNames.join(" ")}
-                  onMouseOver={this.handleHover.bind(this)}>"{keyName}"</span>
+                  onMouseOver={this.handleHover.bind(this)}
+                  onClick={this.handleClick.bind(this)}
+            >"{keyName}"</span>
         )
     }
 }
@@ -45,37 +53,12 @@ export default class JsonBranch extends Component {
         this.setState({visible: true});
     }
 
-    handleClick(e) {
-
-    }
-
     toggleVisibility() {
         this.setState({visible: !this.state.visible})
     }
 
     displayVisibility() {
         return this.state.visible ? "-" : "+";
-    }
-
-    renderValue(branch, key) {
-        switch (true) {
-            case Array.isArray(branch[key]):
-                return <span className="json-array">
-                            <span className="json-bracket">{"["}</span>
-                            <JsonBranch branch={branch[key]} setHoverTrail={this.props.setHoverTrail}/>
-                            <span className="json-bracket">{"]"}</span>
-                        </span>;
-            case typeof(branch[key]) === "object":
-                return <span className="json-object">
-                            <span className="json-bracket">{openCurly()}</span>
-                            <JsonBranch branch={branch[key]} setHoverTrail={this.props.setHoverTrail}/>
-                            <span className="json-bracket">{closeCurly()}</span>
-                        </span>;
-            case typeof(branch[key]) === "number":
-                return <span className="json-number">{branch[key]}</span>;
-            default:
-                return <span className="json-string">"{branch[key]}"</span>
-        }
     }
 
     getArray(branch, keys) {
@@ -89,6 +72,7 @@ export default class JsonBranch extends Component {
             return (
                 <li key={key}>
                     <JsonBranch setHoverTrail={this.props.setHoverTrail}
+                                setActiveTrail={this.props.setActiveTrail}
                                 hoverTrail={this.props.hoverTrail}
                                 trail={trail}
                                 branch={branch[key]}
@@ -109,11 +93,13 @@ export default class JsonBranch extends Component {
                 <li key={key}>
                     <JsonKey keyName={key}
                              setHoverTrail={this.props.setHoverTrail}
+                             setActiveTrail={this.props.setActiveTrail}
                              hoverTrail={this.props.hoverTrail}
                              depth={this.props.depth}
                              trail={trail}/>
                     <span className="json-punctuation">:</span>&nbsp;
                     <JsonBranch setHoverTrail={this.props.setHoverTrail}
+                                setActiveTrail={this.props.setActiveTrail}
                                 hoverTrail={this.props.hoverTrail}
                                 trail={trail}
                                 depth={this.props.depth+1}

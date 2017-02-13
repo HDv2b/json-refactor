@@ -3,6 +3,7 @@
 body {
   font-family: monospace;
   background-color: #2B2B2B;
+  color: #fff;
   line-height: 1.2em;
 }
 
@@ -16,11 +17,18 @@ body {
   }
 }
 
+.transformation {
+  online:  1px #555 solid;
+}
+
 .ide-breadcrumbs {
-  height: 2em;
   color: #fff;
   background-color: #313335;
   border-bottom: 1px #555 solid;
+}
+
+.react-tabs [role=tablist] {
+  margin-bottom: 0;
 }
 
 .toggle {
