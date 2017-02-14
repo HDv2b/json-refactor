@@ -53,6 +53,21 @@ export default class JsonBranch extends Component {
         this.setState({visible: true});
     }
 
+    shouldComponentUpdate(nextProps,nextState) {
+        return !(_.isEqual(this.props.trail,nextProps.trail) &&
+            _.isEqual(this.props.hoverTrail,nextProps.hoverTrail) &&
+            _.isEqual(this.props.branch,nextProps.branch));
+    }
+
+
+    componentWillUpdate(nextProps,nextState){
+        let diff = _.reduce(this.props, function(result, value, key) {
+            return _.isEqual(value, nextProps[key]) ?
+                result : result.concat(key);
+        }, []);
+        return true;
+    }
+
     toggleVisibility() {
         this.setState({visible: !this.state.visible})
     }
