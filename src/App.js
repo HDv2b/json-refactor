@@ -79,7 +79,7 @@ class App extends Component {
     }
 
     processTransformations() {
-        let json = {...this.state.jsonInput};
+        let json = _.cloneDeep(this.state.jsonInput);
 
         for(let transformation of this.state.transformations){
             switch(transformation.transformationType){
