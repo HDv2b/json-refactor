@@ -54,18 +54,21 @@ export default class JsonBranch extends Component {
     }
 
     shouldComponentUpdate(nextProps,nextState) {
-        return !(_.isEqual(this.props.trail,nextProps.trail) &&
+
+        if(!_.isEqual(this.state,nextState)){return true}
+
+        let keyName = this.props.trail[this.props.trail.length - 1];
+
+        if(this.props.trail.length === 0){return true}
+
+        if(this.props.hoverTrail.indexOf(keyName) === -1 && nextProps.hoverTrail.indexOf(keyName) === -1){return false}
+        //if(this.props.activeTrail.indexOf(keyName) === -1 && nextProps.activeTrail.indexOf(keyName) === -1){return false}
+
+        return !(
             _.isEqual(this.props.hoverTrail,nextProps.hoverTrail) &&
-            _.isEqual(this.props.branch,nextProps.branch));
-    }
+            _.isEqual(this.props.branch,nextProps.branch)
+        );
 
-
-    componentWillUpdate(nextProps,nextState){
-        let diff = _.reduce(this.props, function(result, value, key) {
-            return _.isEqual(value, nextProps[key]) ?
-                result : result.concat(key);
-        }, []);
-        return true;
     }
 
     toggleVisibility() {
