@@ -54,21 +54,19 @@ export default class JsonBranch extends Component {
     }
 
     shouldComponentUpdate(nextProps,nextState) {
-
-        if(!_.isEqual(this.state,nextState)){return true}
-
         let keyName = this.props.trail[this.props.trail.length - 1];
 
-        if(this.props.trail.length === 0){return true}
+        switch(true){
+            case (this.state.visible != nextState.visible): // if visibility has changed
+            case (!this.props.trail.length): // if trail has no length (root key)
+            case (this.props.hoverTrail.indexOf(keyName) > -1): // if keyName appears in current hover trail
+            case (nextProps.hoverTrail.indexOf(keyName) > -1): // if keyframe is in updated hover trail
+            case (this.props.activeTrail && this.props.activeTrail.indexOf(keyName) > -1): // if keyName appears in current active trail
+            case (nextProps.activeTrail && nextProps.activeTrail.indexOf(keyName) > -1): // if keyframe is in updated active trail
+                return true;
+        }
 
-        if(this.props.hoverTrail.indexOf(keyName) === -1 && nextProps.hoverTrail.indexOf(keyName) === -1){return false}
-        //if(this.props.activeTrail.indexOf(keyName) === -1 && nextProps.activeTrail.indexOf(keyName) === -1){return false}
-
-        return !(
-            _.isEqual(this.props.hoverTrail,nextProps.hoverTrail) &&
-            _.isEqual(this.props.branch,nextProps.branch)
-        );
-
+        return false;
     }
 
     toggleVisibility() {
