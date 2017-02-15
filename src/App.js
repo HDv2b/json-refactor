@@ -51,6 +51,19 @@ class App extends Component {
         this.setState({transformations});
     }
 
+    addTransformRename(){
+        let transformations = this.state.transformations;
+        transformations.push({
+            transformationType: "rename",
+            trail: [...this.state.activeTrail],
+            newName: this.state.renameKeyValue
+        });
+        this.setState({
+            transformations,
+            renameKeyValue: ""
+        });
+    }
+
     transformDelete(json,trail,depth = 0){
 
         // if end of trail, delete the key
@@ -78,6 +91,37 @@ class App extends Component {
         return json;
     }
 
+    transformRename(json,trail,newName){
+        console.log(json,trail,newName);
+
+        const depth = 0;
+
+        // if end of trail, rename the key by copying old key and deleting the original
+        if(trail.length == depth + 1){
+            if(typeof(json[trail[depth]]) !== "undefined") {
+                json[newName] = json[trail[depth]];
+                delete json[trail[depth]];
+            }
+        }else {
+            let branch = json[trail[depth]];
+            let keyName = trail[depth];
+            trail.shift();
+            // if array, recurse function through all keys
+            if (Array.isArray(branch)) {
+                json[keyName] = branch.map(twig => {
+                    return this.transformDelete(twig, [...trail], depth)
+                });
+            } else {
+                // else recurse the function on the current
+                if(typeof(json[keyName]) !== "undefined") {
+                    json[keyName] = this.transformDelete(branch, [...trail], depth);
+                }
+            }
+        }
+
+        return json;
+    }
+
     processTransformations() {
         let json = _.cloneDeep(this.state.jsonInput);
 
@@ -86,9 +130,16 @@ class App extends Component {
                 case "delete":
                     json = this.transformDelete(json,[...transformation.trail]);
                     break;
+                case "rename":
+                    json = this.transformRename(json,[...transformation.trail],transformation.newName);
+                    break;
             }
         }
         return json;
+    }
+
+    setRenameKeyValue(e) {
+        this.setState({renameKeyValue: e.target.value});
     }
 
     render() {
@@ -126,7 +177,7 @@ class App extends Component {
                     </div>
                     <div className="ide-transformations">
                         <h1>Tools</h1>
-                        <button>Rename Key</button>
+                        <input ref={(input) => {this.renameKeyInput = input;}} onChange={this.setRenameKeyValue.bind(this)} placeholder={this.state.activeTrail[this.state.activeTrail.length -1]} /><button onClick={this.addTransformRename.bind(this)}>Rename Key</button><br />
                         <button onClick={this.addTransformDelete.bind(this)}>Delete Key</button>
                         <h1>Transformations</h1>
                         <ul>

@@ -4,12 +4,20 @@
 import React, {Component} from 'react';
 
 export default class Transformation extends Component {
-    render(){
-        return (
-            <li className="transformation">
-                <p>{this.props.transformation.transformationType}</p><button>{function(){return this.props.transformation.enabled ? "On" : "Off"}}</button>
-                <p>{this.props.transformation.trail.join(" > ")}</p>
-            </li>
-        )
+    render() {
+        switch (this.props.transformation.transformationType){
+            case "delete":
+                return (
+                    <li className="transformation">
+                        <p>[Delete] {this.props.transformation.trail.join(" > ")}</p>
+                    </li>
+                );
+            case "rename":
+                return (
+                    <li className="transformation">
+                        <p>[Rename] {this.props.transformation.trail.join(" > ")} ---> "{this.props.transformation.newName}"</p>
+                    </li>
+                );
+        }
     }
 }
