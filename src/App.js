@@ -77,8 +77,8 @@ class App extends Component {
             trail.shift();
             // if array, recurse function through all keys
             if (Array.isArray(branch)) {
-                json[keyName] = branch.map(twig => {
-                    return this.transformDelete(twig, [...trail], depth)
+                json[keyName] = branch.map(arrayItem => {
+                    return this.transformDelete(arrayItem, [...trail], depth)
                 });
             } else {
                 // else recurse the function on the current
@@ -92,34 +92,34 @@ class App extends Component {
     }
 
     transformRename(json,trail,newName){
-        console.log(json,trail,newName);
+        let keyToChange = trail[trail.length - 1];
 
-        const depth = 0;
-
-        // if end of trail, rename the key by copying old key and deleting the original
-        if(trail.length == depth + 1){
-            if(typeof(json[trail[depth]]) !== "undefined") {
-                json[newName] = json[trail[depth]];
-                delete json[trail[depth]];
-            }
-        }else {
-            let branch = json[trail[depth]];
-            let keyName = trail[depth];
-            trail.shift();
-            // if array, recurse function through all keys
-            if (Array.isArray(branch)) {
-                json[keyName] = branch.map(twig => {
-                    return this.transformDelete(twig, [...trail], depth)
-                });
-            } else {
-                // else recurse the function on the current
-                if(typeof(json[keyName]) !== "undefined") {
-                    json[keyName] = this.transformDelete(branch, [...trail], depth);
+        let newJson = {};
+        // foreach in order to try to preserve key order
+        _.forEach(json,(value,key, branch) => {
+            if(trail[0] === key){
+                // if key matches first element in trail
+                if(trail.length === 1){
+                    // if it's the last element in the trail, then this is the key to change
+                    newJson[newName] = json[key];
+                } else {
+                    // or else iterate up the trail
+                    trail.shift();
+                    if (Array.isArray(json[key])) {
+                        // if element is an array, iterate through each element
+                        newJson[key] = json[key].map(arrayItem => this.transformRename(arrayItem, [...trail], newName));
+                    } else {
+                        // else EZ-PZ
+                        newJson[key] = this.transformRename(json[key], [...trail], newName);
+                    }
                 }
+            } else {
+                // preserve the branch;
+                newJson[key] = json[key];
             }
-        }
+        });
 
-        return json;
+        return newJson;
     }
 
     processTransformations() {
