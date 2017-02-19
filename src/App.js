@@ -258,11 +258,30 @@ class App extends Component {
                     <textarea value={JSON.stringify(this.processTransformations(), null," ")} readOnly name="" id="output" cols="30" rows="10"/>
                 </TabPanel>
 
-                <TabPanel>
+                <TabPanel className="tab-about">
                     <h1>JSON-Refactor</h1>
                     <p>A JSON refactoring tool.</p>
                     <p>Built and hosted publicly by <a title="notmybase.com" href="https://notmybase.com">Hussein Duvigneau</a></p>
                     <p>Available on <a title="github.com" href="https://github.com/ElGoorf/json-refactor">GitHub</a></p>
+                    <h2>Updates</h2>
+                    <h3>19/02/2017 || Prototype build:</h3>
+                    <ul>
+                        <li>JSON input</li>
+                        <li>JSON editing:<ul>
+                            <li>Rename Key</li>
+                            <li>Delete Key</li>
+                            <li>Hashify Array with Key</li>
+                        </ul></li>
+                        <li>JSON output</li>
+                        <li>Basic layout</li>
+                    </ul>
+                    <h3>Next build:</h3>
+                    <ul>
+                        <li>Delete transformations</li>
+                        <li>Toggle transformations</li>
+                        <li>Reorder transformations</li>
+                        <li>Share project (w/ url slug)</li>
+                    </ul>
                 </TabPanel>
             </Tabs>
         );
