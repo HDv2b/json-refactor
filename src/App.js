@@ -127,11 +127,9 @@ class App extends Component {
     }
 
     transformHashify(json,trail){
-        console.log("hashify",json,trail);
         let newJson = {};
         if (Array.isArray(json)) {
             if(trail.length === 1) {
-                console.log("lets hash this shit");
                 let objectIdKeyName = trail[trail.length - 1];
                 _.forEach(json, (value, key, branch) => {
                     // for each item in the array, make a new json key with the value being that object
@@ -141,18 +139,14 @@ class App extends Component {
                 });
             } else {
                 // still need to go deeper...
-                console.log("An array, need to go deeper...");
                 newJson = [...json].map(arrayItem => this.transformHashify(arrayItem, [...trail]));
             }
         } else {
             _.forEach(json, (value, key, branch) => {
                 // for each property in the object
                 let newTrail = [...trail];
-                console.log("key",newTrail,key);
                 if (newTrail[0] === key) {
-                    console.log("key matches");
                     newTrail.shift();
-                    console.log("object");
                     // if key matches first element in trail
                     newJson[key] = this.transformHashify(json[key], [...newTrail])
                 } else {
