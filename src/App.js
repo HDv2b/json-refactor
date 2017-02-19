@@ -242,7 +242,7 @@ class App extends Component {
                 </TabPanel>
 
                 <TabPanel>
-                    <textarea value={JSON.stringify(this.processTransformations(), null," ")} name="" id="output" cols="30" rows="10"/>
+                    <textarea value={JSON.stringify(this.processTransformations(), null," ")} readOnly name="" id="output" cols="30" rows="10"/>
                 </TabPanel>
             </Tabs>
         );
