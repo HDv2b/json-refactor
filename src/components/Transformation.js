@@ -4,20 +4,28 @@
 import React, {Component} from 'react';
 
 export default class Transformation extends Component {
-    render() {
+
+    getTransformContents() {
         switch (this.props.transformation.transformationType){
             case "delete":
                 return (
-                    <li className="transformation">
-                        <p>[Delete] {this.props.transformation.trail.join(" > ")}</p>
-                    </li>
+                    <span>[Delete] {this.props.transformation.trail.join(" > ")}</span>
                 );
             case "rename":
                 return (
-                    <li className="transformation">
-                        <p>[Rename] {this.props.transformation.trail.join(" > ")} ---> "{this.props.transformation.newName}"</p>
-                    </li>
+                    <span>[Rename] {this.props.transformation.trail.join(" > ")} ---> "{this.props.transformation.newName}"</span>
+                );
+            case "hashify":
+                return (
+                    <span>[Hashify] {this.props.transformation.trail.join(" > ")}</span>
                 );
         }
+    }
+
+    render() {
+        return <li className="transformation">
+            {/*<input type="checkbox" checked={this.props.transformation.isActive}/>*/}
+            {this.getTransformContents()}
+            </li>
     }
 }

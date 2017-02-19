@@ -36,13 +36,13 @@ class App extends Component {
         this.setState({activeTrail: data});
     };
 
-    selectTab(index, last){
+    selectTab(index, last) {
         this.setState({
             selectedTab: index
         });
     };
 
-    addTransformDelete(){
+    addTransformDelete() {
         let transformations = this.state.transformations;
         transformations.push({
             transformationType: "delete",
@@ -51,24 +51,30 @@ class App extends Component {
         this.setState({transformations});
     }
 
-    addTransformRename(){
+    addTransformRename() {
         let transformations = this.state.transformations;
         transformations.push({
             transformationType: "rename",
             trail: [...this.state.activeTrail],
             newName: this.state.renameKeyValue
         });
-        this.setState({
-            transformations,
-            renameKeyValue: ""
-        });
+        this.setState({transformations});
     }
 
-    transformDelete(json,trail,depth = 0){
+    addTransformHashify() {
+        let transformations = this.state.transformations;
+        transformations.push({
+            transformationType: "hashify",
+            trail: [...this.state.activeTrail]
+        });
+        this.setState({transformations});
+    }
+
+    transformDelete(json, trail, depth = 0) {
 
         // if end of trail, delete the key
-        if(trail.length == depth + 1){
-            if(typeof(json[trail[depth]]) !== "undefined") {
+        if (trail.length == depth + 1) {
+            if (typeof(json[trail[depth]]) !== "undefined") {
                 delete json[trail[depth]];
             }
         } else {
@@ -82,7 +88,7 @@ class App extends Component {
                 });
             } else {
                 // else recurse the function on the current
-                if(typeof(json[keyName]) !== "undefined") {
+                if (typeof(json[keyName]) !== "undefined") {
                     json[keyName] = this.transformDelete(branch, [...trail], depth);
                 }
             }
@@ -91,15 +97,13 @@ class App extends Component {
         return json;
     }
 
-    transformRename(json,trail,newName){
-        let keyToChange = trail[trail.length - 1];
-
+    transformRename(json, trail, newName) {
         let newJson = {};
         // foreach in order to try to preserve key order
-        _.forEach(json,(value,key, branch) => {
-            if(trail[0] === key){
+        _.forEach(json, (value, key, branch) => {
+            if (trail[0] === key) {
                 // if key matches first element in trail
-                if(trail.length === 1){
+                if (trail.length === 1) {
                     // if it's the last element in the trail, then this is the key to change
                     newJson[newName] = json[key];
                 } else {
@@ -122,16 +126,58 @@ class App extends Component {
         return newJson;
     }
 
+    transformHashify(json,trail){
+        console.log("hashify",json,trail);
+        let newJson = {};
+        if (Array.isArray(json)) {
+            if(trail.length === 1) {
+                console.log("lets hash this shit");
+                let objectIdKeyName = trail[trail.length - 1];
+                _.forEach(json, (value, key, branch) => {
+                    // for each item in the array, make a new json key with the value being that object
+                    let objectId = value[objectIdKeyName];
+                    newJson[objectId] = value;
+                    delete newJson[objectId][objectIdKeyName]
+                });
+            } else {
+                // still need to go deeper...
+                console.log("An array, need to go deeper...");
+                newJson = [...json].map(arrayItem => this.transformHashify(arrayItem, [...trail]));
+            }
+        } else {
+            _.forEach(json, (value, key, branch) => {
+                // for each property in the object
+                let newTrail = [...trail];
+                console.log("key",newTrail,key);
+                if (newTrail[0] === key) {
+                    console.log("key matches");
+                    newTrail.shift();
+                    console.log("object");
+                    // if key matches first element in trail
+                    newJson[key] = this.transformHashify(json[key], [...newTrail])
+                } else {
+                    // preserve the branch;
+                    newJson[key] = json[key];
+                }
+            });
+        }
+
+        return newJson;
+    };
+
     processTransformations() {
         let json = _.cloneDeep(this.state.jsonInput);
 
-        for(let transformation of this.state.transformations){
-            switch(transformation.transformationType){
+        for (let transformation of this.state.transformations) {
+            switch (transformation.transformationType) {
                 case "delete":
-                    json = this.transformDelete(json,[...transformation.trail]);
+                    json = this.transformDelete(json, [...transformation.trail]);
                     break;
                 case "rename":
-                    json = this.transformRename(json,[...transformation.trail],transformation.newName);
+                    json = this.transformRename(json, [...transformation.trail], transformation.newName);
+                    break;
+                case "hashify":
+                    json = this.transformHashify(json, [...transformation.trail]);
                     break;
             }
         }
@@ -142,10 +188,17 @@ class App extends Component {
         this.setState({renameKeyValue: e.target.value});
     }
 
+    handleRenameClick(e) {
+        this.addTransformRename();
+        //this.setState({renameKeyValue:""});
+        console.log(e.target.value);
+        //e.target.value = "";
+    }
+
     render() {
 
-        let transformations = this.state.transformations.map((transformation,key) => {
-            return <Transformation key={key} transformation={transformation} />
+        let transformations = this.state.transformations.map((transformation, key) => {
+            return <Transformation key={key} transformation={transformation}/>
         });
 
         return (
@@ -158,7 +211,8 @@ class App extends Component {
                 </TabList>
 
                 <TabPanel>
-                    <p>Enter raw JSON below, and then click "Edit" on the menu above. You can come back and edit this at any time.</p>
+                    <p>Enter raw JSON below, and then click "Edit" on the menu above. You can come back and edit this at
+                        any time.</p>
                     <textarea name="" id="input" cols="30" rows="10" onChange={this.initJson.bind(this)}/>
                 </TabPanel>
 
@@ -177,8 +231,15 @@ class App extends Component {
                     </div>
                     <div className="ide-transformations">
                         <h1>Tools</h1>
-                        <input ref={(input) => {this.renameKeyInput = input;}} onChange={this.setRenameKeyValue.bind(this)} placeholder={this.state.activeTrail[this.state.activeTrail.length -1]} /><button onClick={this.addTransformRename.bind(this)}>Rename Key</button><br />
+                        <input ref={(input) => {
+                            this.renameKeyInput = input;
+                        }} onChange={this.setRenameKeyValue.bind(this)}
+                               placeholder={this.state.activeTrail[this.state.activeTrail.length - 1]}/>
+                        <button onClick={this.handleRenameClick.bind(this)}>Rename Key</button>
+                        <br />
                         <button onClick={this.addTransformDelete.bind(this)}>Delete Key</button>
+                        <br />
+                        <button onClick={this.addTransformHashify.bind(this)}>Hashify</button>
                         <h1>Transformations</h1>
                         <ul>
                             {transformations}
