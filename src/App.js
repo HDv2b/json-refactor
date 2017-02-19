@@ -202,6 +202,7 @@ class App extends Component {
                     <Tab className="tab-header">Input</Tab>
                     <Tab className="tab-header">Edit</Tab>
                     <Tab className="tab-header">Output</Tab>
+                    <Tab className="tab-header">About</Tab>
                 </TabList>
 
                 <TabPanel>
@@ -210,11 +211,12 @@ class App extends Component {
                     <textarea name="" id="input" cols="30" rows="10" onChange={this.initJson.bind(this)}/>
                 </TabPanel>
 
-                <TabPanel>
+                <TabPanel className="tab-ide">
                     <Breadcrumbs className="ide-breadcrumbs"
                                  activeTrail={this.state.activeTrail}
                                  hoverTrail={this.state.hoverTrail}/>
                     <div id="json-parsed" className="ide-json">
+                        <div className="ide-json-gutter"></div>
                         <JsonBranch branch={this.processTransformations()}
                                     setHoverTrail={this.setHoverTrail.bind(this)}
                                     setActiveTrail={this.setActiveTrail.bind(this)}
@@ -225,22 +227,28 @@ class App extends Component {
                     </div>
                     <div className="ide-transformations">
                         <h1>Tools</h1>
-                        <input ref={(input) => {
-                            this.renameKeyInput = input;
-                        }} onChange={this.setRenameKeyValue.bind(this)}
-                               placeholder={this.state.activeTrail[this.state.activeTrail.length - 1]}/>
-                        <button onClick={this.handleRenameClick.bind(this)}>Rename Key</button>
+                        <span className="transform-field">
+                            <input ref={(input) => {
+                                this.renameKeyInput = input;
+                            }} onChange={this.setRenameKeyValue.bind(this)}
+                                   placeholder={this.state.activeTrail[this.state.activeTrail.length - 1]}/>
+                            <button onClick={this.handleRenameClick.bind(this)}>Rename Key</button>
+                        </span>
                         <br />
-                        <button onClick={this.addTransformDelete.bind(this)}>Delete Key</button>
+                        <span className="transform-field">
+                            <button onClick={this.addTransformDelete.bind(this)}>Delete Key</button>
+                        </span>
                         <br />
-                        <button onClick={this.addTransformHashify.bind(this)}>Hashify</button>
+                        <span className="transform-field">
+                            <button onClick={this.addTransformHashify.bind(this)}>Hashify</button>
+                        </span>
                         <section>
                             <h2>"Hashify?"</h2>
                             <p>Use this transform to convert an array into an object, using the selected keyname as the object ID. See screenshot below for example. Note the id field is selected:</p>
                             <img className="screenshot" src="media/hashify.png"/>
                         </section>
                         <h1>Transformations</h1>
-                        <ol>
+                        <ol className="transformation-list">
                             {transformations}
                         </ol>
                     </div>
@@ -248,6 +256,13 @@ class App extends Component {
 
                 <TabPanel>
                     <textarea value={JSON.stringify(this.processTransformations(), null," ")} readOnly name="" id="output" cols="30" rows="10"/>
+                </TabPanel>
+
+                <TabPanel>
+                    <h1>JSON-Refactor</h1>
+                    <p>A JSON refactoring tool.</p>
+                    <p>Built and hosted publicly by <a title="notmybase.com" href="https://notmybase.com">Hussein Duvigneau</a></p>
+                    <p>Available on <a title="github.com" href="https://github.com/ElGoorf/json-refactor">GitHub</a></p>
                 </TabPanel>
             </Tabs>
         );

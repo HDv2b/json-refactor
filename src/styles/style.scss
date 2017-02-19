@@ -7,6 +7,57 @@ body {
   line-height: 1.2em;
 }
 
+h1 {
+  font-size: 2em;
+  line-height: 2em;
+}
+
+h2 {
+  font-size: 1.5em;
+  line-height: 1.5em;
+}
+
+p {
+  margin-bottom: 1em;
+}
+
+a {
+  color: #CC7832;
+}
+
+.tab-ide {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  .ide-breadcrumbs {
+    height: 3em;
+    width: 100%;
+  }
+  .ide-transformations {
+    width: 50%;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+  .ide-json {
+    max-height: calc(100vh - 70px);
+    overflow-y: auto;
+    padding-left: 20px;
+    box-sizing: border-box;
+  }
+}
+
+.transform-field {
+  display: inline-block;
+  margin: 2px;
+}
+
+.transformation-list {
+  list-style: decimal;
+  li {
+    margin-left: 30px;
+  }
+}
+
 .tab-header {
   color: #fff;
   cursor: pointer;
@@ -18,7 +69,7 @@ body {
 }
 
 .transformation {
-  online:  1px #555 solid;
+  outline:  1px #555 solid;
 }
 
 .ide-breadcrumbs {
@@ -42,7 +93,6 @@ body {
 .ide-json {
   float: left;
   width: 50%;
-  max-height: 100vh; /* todo: use flexbox */
   overflow: auto;
   position: relative;
 }
@@ -50,6 +100,11 @@ body {
 .ide-transformations {
   width: 50%;
   float: right;
+}
+
+.ide-json-gutter {
+  width: 30px;
+  position: relative;
 }
 
 .json-branch {
