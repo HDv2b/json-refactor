@@ -234,10 +234,15 @@ class App extends Component {
                         <button onClick={this.addTransformDelete.bind(this)}>Delete Key</button>
                         <br />
                         <button onClick={this.addTransformHashify.bind(this)}>Hashify</button>
+                        <section>
+                            <h2>"Hashify?"</h2>
+                            <p>Use this transform to convert an array into an object, using the selected keyname as the object ID. See screenshot below for example. Note the id field is selected:</p>
+                            <img className="screenshot" src="media/hashify.png"/>
+                        </section>
                         <h1>Transformations</h1>
-                        <ul>
+                        <ol>
                             {transformations}
-                        </ul>
+                        </ol>
                     </div>
                 </TabPanel>
 
