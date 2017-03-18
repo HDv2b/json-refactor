@@ -45,25 +45,39 @@ class App extends Component {
     addTransformDelete() {
         let transformations = this.state.transformations;
         transformations.push({
+            isActive: true,
             transformationType: "delete",
             trail: [...this.state.activeTrail]
         });
         this.setState({transformations});
+
+        // update breadcrumbs to select parent of deleted object
+        let newActiveTrail = [...this.state.activeTrail];
+        newActiveTrail.splice(-1,1);
+        this.setActiveTrail(newActiveTrail);
     }
 
     addTransformRename() {
         let transformations = this.state.transformations;
+        let newName = this.state.renameKeyValue;
         transformations.push({
+            isActive: true,
             transformationType: "rename",
             trail: [...this.state.activeTrail],
-            newName: this.state.renameKeyValue
+            newName
         });
         this.setState({transformations});
+
+        // update breadcrumbs to match new name
+        let newActiveTrail = [...this.state.activeTrail];
+        newActiveTrail.splice(-1,1,newName);
+        this.setActiveTrail(newActiveTrail);
     }
 
     addTransformHashify() {
         let transformations = this.state.transformations;
         transformations.push({
+            isActive: true,
             transformationType: "hashify",
             trail: [...this.state.activeTrail]
         });
@@ -163,16 +177,18 @@ class App extends Component {
         let json = _.cloneDeep(this.state.jsonInput);
 
         for (let transformation of this.state.transformations) {
-            switch (transformation.transformationType) {
-                case "delete":
-                    json = this.transformDelete(json, [...transformation.trail]);
-                    break;
-                case "rename":
-                    json = this.transformRename(json, [...transformation.trail], transformation.newName);
-                    break;
-                case "hashify":
-                    json = this.transformHashify(json, [...transformation.trail]);
-                    break;
+            if(transformation.isActive) {
+                switch (transformation.transformationType) {
+                    case "delete":
+                        json = this.transformDelete(json, [...transformation.trail]);
+                        break;
+                    case "rename":
+                        json = this.transformRename(json, [...transformation.trail], transformation.newName);
+                        break;
+                    case "hashify":
+                        json = this.transformHashify(json, [...transformation.trail]);
+                        break;
+                }
             }
         }
         return json;
@@ -189,10 +205,20 @@ class App extends Component {
         //e.target.value = "";
     }
 
+    toggleTransformActive(key) {
+        let transformations = [...this.state.transformations];
+        transformations[key].isActive = !transformations[key].isActive;
+        this.setState({transformations});
+    }
+
+    deleteTransform() {
+
+    }
+
     render() {
 
         let transformations = this.state.transformations.map((transformation, key) => {
-            return <Transformation key={key} transformation={transformation}/>
+            return <Transformation key={key} transformation={transformation} toggleTransform={() => this.toggleTransformActive(key)}/>
         });
 
         return (

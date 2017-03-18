@@ -2,16 +2,16 @@
  * Require Browsersync along with webpack and middleware for it
  */
 
-var browserSync = require('browser-sync');
-var webpack = require('webpack');
-var webpackDevMiddleware = require('webpack-dev-middleware');
-var webpackHotMiddleware = require('webpack-hot-middleware');
+const browserSync = require('browser-sync');
+const webpack = require('webpack');
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpackHotMiddleware = require('webpack-hot-middleware');
 
 /**
  * Require ./webpack.config.js and make a bundler from it
  */
-var webpackConfig = require('./webpack.config');
-var bundler = webpack(webpackConfig);
+const webpackConfig = require('./webpack.config');
+const bundler = webpack(webpackConfig);
 
 /**
  * Run Browsersync and use middleware for Hot Module Replacement

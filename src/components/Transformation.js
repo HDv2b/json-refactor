@@ -24,7 +24,7 @@ export default class Transformation extends Component {
 
     render() {
         return <li className="transformation">
-            {/*<input type="checkbox" checked={this.props.transformation.isActive}/>*/}
+            <input type="checkbox" checked={this.props.transformation.isActive} onChange={this.props.toggleTransform}/>
             {this.getTransformContents()}
             </li>
     }
