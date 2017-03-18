@@ -211,14 +211,16 @@ class App extends Component {
         this.setState({transformations});
     }
 
-    deleteTransform() {
-
+    deleteTransform(key) {
+        let transformations = [...this.state.transformations];
+        transformations.splice(key,1);
+        this.setState({transformations});
     }
 
     render() {
 
         let transformations = this.state.transformations.map((transformation, key) => {
-            return <Transformation key={key} transformation={transformation} toggleTransform={() => this.toggleTransformActive(key)}/>
+            return <Transformation key={key} transformation={transformation} deleteTransform={() => this.deleteTransform(key)} toggleTransform={() => this.toggleTransformActive(key)}/>
         });
 
         return (
