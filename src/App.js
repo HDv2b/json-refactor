@@ -303,12 +303,18 @@ class App extends Component {
                         <li>JSON output</li>
                         <li>Basic layout</li>
                     </ul>
-                    <h3>Next build:</h3>
+                    <h3>18/03/2017 || Enhancements:</h3>
                     <ul>
                         <li>Delete transformations</li>
                         <li>Toggle transformations</li>
+                        <li>Bugfix: deleting and renaming keys updates the breadcrumbs</li>
+                        <li>Favicon</li>
+                    </ul>
+                    <h3>Coming soon...</h3>
+                    <ul>
                         <li>Reorder transformations</li>
-                        <li>Share project (w/ url slug)</li>
+                        <li>Share (Import/Export) Transformations</li>
+                        <li>Breadcrumbs legibility/functionality improvements</li>
                     </ul>
                 </TabPanel>
             </Tabs>
