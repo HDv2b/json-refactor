@@ -155,13 +155,14 @@ export default class JsonBranch extends Component {
             case "[object Boolean]":
                 return <span className="json-boolean">{JSON.stringify(branch)}</span>;
             case "[object Null]":
-                return <span className="json-null">{branch}</span>;
+                return <span className="json-null">null</span>;
         }
     }
 
     render() {
         const branch = this.props.branch;
-        let keys = Object.keys(branch);
+
+        let keys = branch ? Object.keys(branch) : [];
 
         let classNames = ["json-branch"];
 
