@@ -7,6 +7,6 @@ import App from './App';
 import './styles/style.scss';
 
 ReactDOM.render(
-    <App />,
-    document.getElementById('json-app')
+  <App />,
+  document.getElementById('json-app'),
 );

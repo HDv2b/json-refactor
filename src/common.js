@@ -3,9 +3,9 @@
  */
 
 export function openCurly() {
-    return "{";
+  return '{';
 }
 
 export function closeCurly() {
-    return "}";
+  return '}';
 }
