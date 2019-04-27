@@ -1,46 +1,35 @@
-// For instructions about this file refer to
-// webpack and webpack-hot-middleware documentation
-
-var webpack = require('webpack');
-var path = require('path');
+const HtmlWebPackPlugin = require("html-webpack-plugin");
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 module.exports = {
-    debug: true,
-    devtool: '#eval-source-map',
-    context: path.join(__dirname, 'src'),
-    resolve: {
-        root: path.resolve('./src'),
-        extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx'],
-    },
-    entry: [
-        'webpack/hot/dev-server',
-        'webpack-hot-middleware/client',
-        './index',
-    ],
-    output: {
-        path: path.join(__dirname, 'src'),
-        publicPath: '/',
-        filename: 'bundle.js',
-    },
-
-    plugins: [
-        new webpack.optimize.OccurenceOrderPlugin(),
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin(),
-    ],
-
     module: {
-        loaders: [
+        rules: [
             {
-                test: /\.jsx?$/,
+                test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
-                loaders: ['react-hot', 'babel']
+                use: {
+                    loader: "babel-loader"
+                }
             },
             {
                 test: /\.scss$/,
-                loaders: ['style', 'css', 'sass']
+                use: [
+                    "style-loader", // creates style nodes from JS strings
+                    "css-loader", // translates CSS into CommonJS
+                    "sass-loader" // compiles Sass to CSS, using Node Sass by default
+                ]
+            },
+            {
+                test: /\.png$/,
+                loader: 'file-loader'
             }
-        ],
-        rules: []
-    }
-}
+        ]
+    },
+    plugins: [
+        new HtmlWebPackPlugin({
+            template: "./src/index.html",
+            filename: "./index.html"
+        }),
+        new FaviconsWebpackPlugin('./src/favicon-512.png')
+    ]
+};

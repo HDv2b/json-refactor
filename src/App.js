@@ -7,7 +7,7 @@ import Breadcrumbs from "./components/Breadcrumbs";
 import JsonBranch from './components/JsonBranch';
 import Transformation from './components/Transformation';
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
-window.Perf = require('react-addons-perf');
+// window.Perf = require('react-addons-perf');
 
 class App extends Component {
     constructor() {

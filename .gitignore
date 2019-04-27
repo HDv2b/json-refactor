@@ -1,4 +1,5 @@
-/node_modules
 .idea
-/src/bundle.js
-/sample-data/
+/src
+/sample-data
+/node_modules
+/dist
