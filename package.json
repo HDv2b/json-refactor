@@ -9,7 +9,7 @@
     "lint": "echo \"Running ESLint on src directory.\" && eslint ./src --ext=js --ext=jsx"
   },
   "dependencies": {
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.11",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-redux": "^7.0.2",
@@ -36,7 +36,6 @@
     "html-webpack-plugin": "^3.2.0",
     "jest": "^24.7.1",
     "json-loader": "^0.5.4",
-    "node-sass": "^4.5.0",
     "pre-commit": "^1.2.2",
     "react-addons-perf": "^15.4.2",
     "react-hot-loader": "^4.8.4",
