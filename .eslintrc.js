@@ -13,7 +13,8 @@ module.exports = {
     "plugins": [
         "react",
         "jsx-a11y",
-        "import"
+        "import",
+        "jest",
     ],
     "rules": {
         "no-script-url": "off"
