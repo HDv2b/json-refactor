@@ -1,5 +1,6 @@
 {
   "name": "json-refactor",
+  "author": "Hussein Duvigneau <hussein@notmybase.com> (https://notmybase.com)",
   "version": "1.0.0",
   "description": "json-refactor",
   "main": "app.js",
@@ -8,6 +9,14 @@
     "build": "webpack --mode production",
     "lint": "echo \"Running ESLint on src directory.\" && eslint ./src --ext=js --ext=jsx"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ElGoorf/json-refactor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ElGoorf/json-refactor/issues"
+  },
+  "license": "GPL-3.0-or-later",
   "dependencies": {
     "lodash": "^4.17.11",
     "react": "^16.8.6",
@@ -37,7 +46,6 @@
     "jest": "^24.7.1",
     "json-loader": "^0.5.4",
     "pre-commit": "^1.2.2",
-    "react-addons-perf": "^15.4.2",
     "react-hot-loader": "^4.8.4",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
